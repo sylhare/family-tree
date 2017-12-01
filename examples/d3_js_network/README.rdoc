@@ -1,0 +1,22 @@
+=== Description
+
+Using {D3.js}[http://mbostock.github.com/d3/] to display a Neo4j network via its {REST API}[http://components.neo4j.org/neo4j-server/milestone/rest.html] and Cypher language.
+
+=== How To
+
+Follow along on {Visualizing a Network with Cypher}[http://wp.me/p26jdv-8B]
+
+  git clone git@github.com:maxdemarzi/d3_js_network.git
+  cd d3_js_network
+  bundle install
+  rackup
+  
+Then visit http://localhost:9292/index.html to see the examples.
+
+See an example running on heroku at {http://evening-mountain-5731.herokuapp.com/index.html}[http://evening-mountain-5731.herokuapp.com/index.html]
+
+=== Links
+
+* {Neo4j Community}[http://neo4j.org]
+* {D3.js}[http://mbostock.github.com/d3/]
+* {Max De Marzi}[http://maxdemarzi.com]
