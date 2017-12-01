@@ -1,0 +1,30 @@
+=== Description
+
+An very basic introduction to using {D3.js}[http://mbostock.github.com/d3/] to display a Neo4j graph via its {REST API}[http://components.neo4j.org/neo4j-server/milestone/rest.html].
+
+=== How To
+
+Follow along on {Graph Visualization and Neo4j - Part Three}[http://wp.me/p26jdv-4k]
+
+  git clone git@github.com:maxdemarzi/d3_js_intro.git
+  cd d3_js_intro
+  bundle install
+  rake neo4j:install
+  rake neo4j:start
+  rake neo4j:create
+  rackup
+  
+Then visit http://localhost:9292/index.html to see the examples.
+
+See an example running on heroku at {http://morning-sunset-4428.herokuapp.com/index.html}[http://morning-sunset-4428.herokuapp.com/index.html]
+
+=== Requirements
+
+* Ruby 1.9.2+
+* Neo4j 1.7
+
+=== Links
+
+* {Neo4j Community}[http://neo4j.org]
+* {D3.js}[http://mbostock.github.com/d3/]
+* {Max De Marzi}[http://maxdemarzi.com]
