@@ -1,0 +1,63 @@
+<html>
+<meta charset="UTF-8"> 
+<head>
+<!--
+Source: https://www.grundsatzlich-it.nl/development/using-neo4j-cypher-queries-through-the-rest-api/
+
+Have neo4j running before launching the page otherwise it can't connect to http://localhost:7474/ 
+
+-->
+<title>Cypher-test</title>
+<script
+	src="https://code.jquery.com/jquery-3.2.1.min.js"
+	integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+	crossorigin="anonymous"></script>
+</head>
+<body>
+    <script type="text/javascript">
+        function post_cypherquery() {
+            $('#messageArea').html('<h3>(loading)</h3>');
+
+            $.ajax({
+                url: "http://localhost:7474/db/data/transaction/commit",
+                type: 'POST',
+                data: JSON.stringify({ "statements": [{ "statement": $('#cypher-in').val() }] }),
+                contentType: 'application/json',
+                accept: 'application/json; charset=UTF-8'                
+            }).done(function (data) {
+                $('#resultsArea').text(JSON.stringify(data));
+                /* process data */
+                // Data contains the entire resultset. Each separate record is a data.value item, containing the key/value pairs.
+                var htmlString = '<table><tr><td>Columns:</td><td>' + data.results[0].columns + '</td></tr>';
+                $.each(data.results[0].data, function (k, v) {
+                    $.each(v.row, function (k2, v2) {
+                        htmlString += '<tr>';
+                        $.each(v2, function (property, nodeval) {
+                            htmlString += '<td>' + property + ':</td><td>' + nodeval + '</td>';
+                        });
+                        htmlString += '</tr>';
+                    });
+                });
+                $('#outputArea').html(htmlString + '</table>');
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                $('#messageArea').html('<h3>' + textStatus + ' : ' + errorThrown + '</h3>')
+            });
+        };
+    </script>
+
+<h1>Cypher-test</h1>
+<p>
+<div id="messageArea"></div>
+<p>
+<table>
+  <tr>
+    <td><input name="cypher" id="cypher-in" value="MATCH (n) RETURN n LIMIT 10" /></td>
+    <td><button name="post cypher" onclick="post_cypherquery();">execute</button></td>
+  </tr>
+</table>
+<p>
+<div id="outputArea"></div>
+<p>
+</body>
+</html>
