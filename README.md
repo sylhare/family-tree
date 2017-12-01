@@ -1,3 +1,12 @@
+# Family Tree neo4j
+
+## Model
+
+Here is a simple model straight from the neo4j website
+![](https://github.com/Sylhare/family-tree-neo4j/blob/master/resources/img/label-property-graph-model.JPG?raw=true)
+
+We'll start with something with that then make it evolve.
+
 ## Neo4j
 
 ### Presentation
@@ -84,7 +93,7 @@ To install Apoc:
 
 There are multiple [options](https://neo4j.com/developer/language-guides/) to interac with Neo4j.
 
-With python 3, you can use [py2neo](http://py2neo.org/v3/) a client library and toolkit to communicate with neo4j.
+With python 3, you can use the pyhton driver with [py2neo](http://py2neo.org/v3/) a client library and toolkit to communicate with neo4j.
 
 To install py2neo
 
