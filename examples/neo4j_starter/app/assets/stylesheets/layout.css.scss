@@ -1,0 +1,47 @@
+
+#container {
+	margin: 0 auto;
+	max-width: 900px;
+	min-width: 500px;
+	background-color: #DDD;
+	position:relative;
+	padding-top: 2em;
+	padding: 1em;
+}
+
+.comment-field {
+	border-top: 1px solid #6C7EA4;
+}
+
+.comment {
+	border: 1px solid #6C7EA4;
+}
+
+.comment-header {
+	background-color: #1C2A49;
+	color: white;
+}
+.comment-body {
+	background-color: white;
+	padding: 0 2em;
+}
+
+.comment-footer {
+	background-color: #B0B0B0;
+	margin-bottom: 1em;
+	a{
+	color: black;
+	}
+}
+
+.comment-author {
+	padding-left: 2em;
+	padding-right: 2em;
+}
+.comment-email {
+	padding-right: 2em;
+}
+.comment-time {
+	float:right;
+	padding-right: 2em;
+}

@@ -1,0 +1,24 @@
+<div class="comment comment-header">
+<span class="comment-author">
+  <strong>Author:</strong>
+  <%= c.author %>
+</span>
+<span class="comment-email">
+  <strong>Email:</strong>
+  <%= c.email %>
+</span>
+<span class="comment-time">
+	<%= c.created_at.strftime("%x: %I:%M %p") %>
+</span>
+</div>
+
+
+<div class="comment comment-body">
+<p>
+  <%= c.content %>
+</p>
+</div>
+<div class="comment comment-footer">
+<%= link_to 'Edit', edit_post_comment_path(@post, c) %>
+<%= link_to 'Destroy', [@post, c], method: :delete, data: { confirm: 'Are you sure?' } %>
+</div>
