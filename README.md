@@ -7,6 +7,45 @@ Here is a simple model straight from the neo4j website
 
 We'll start with something with that then make it evolve.
 
+//Creates 2 Person type node Anna and Dany in a UNION type relationship with a Union node
+```
+CREATE p =(a:Person { name:'Anna' })-[:UNION]->(:Union { name:'Wedding' })<-[:UNION]-(b:Person { name: 'Dany' })
+RETURN p
+```
+
+// Creates the WIFE and HUSBAND relationship between Anna and Danny
+```
+MATCH (a:Person),(b:Person)
+WHERE a.name = 'Anna' AND b.name = 'Dany'
+CREATE (a)-[:WIFE]->(b)
+CREATE (b)-[:HUSBAND]->(a)
+RETURN a, b
+```
+
+// Find the :Union node named Wedding or using any with its ID (81 in my case) and setting the new gedcom property at U11
+```
+MATCH (a:Union)
+WHERE id(a)=81 OR a.name = 'Wedding'
+SET a.gedcom = 'U11'
+RETURN a
+```
+
+// Finding the :Union node with gedcom at U11 and create a new Person node named Tim related to it as a CHILD
+```
+MATCH (a:Union)
+WHERE a.gedcom = 'U11'
+CREATE (:Person {name:"Tim"})-[:CHILD]->(a)
+RETURN a
+```
+
+// Find that created note with a CHILD relation, finds any UNION in the  relation and add a SON relationship from the node Tim to them.
+```
+MATCH (a:Person { name:'Tim' })-[:CHILD]->(:Union { gedcom:'U11' })
+MATCH (b:Person)-[:UNION]->(:Union { gedcom:'U11' })
+CREATE (a)-[:SON]->(b)
+RETURN a
+```
+
 ## Neo4j
 
 ### Presentation
