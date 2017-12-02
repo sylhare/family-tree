@@ -1,0 +1,5 @@
+[console_scripts]
+geoff = py2neo.ext.geoff.__main__:main
+neokit = neokit:main
+py2neo = py2neo.__init__:main
+
