@@ -7,39 +7,32 @@ Here is a simple model straight from the neo4j website
 
 We'll start with something with that then make it evolve.
 
+```js
 //Creates 2 Person type node Anna and Dany in a UNION type relationship with a Union node
-```
 CREATE p =(a:Person { name:'Anna' })-[:UNION]->(:Union { name:'Wedding' })<-[:UNION]-(b:Person { name: 'Dany' })
 RETURN p
-```
 
 // Creates the WIFE and HUSBAND relationship between Anna and Danny
-```
 MATCH (a:Person),(b:Person)
 WHERE a.name = 'Anna' AND b.name = 'Dany'
 CREATE (a)-[:WIFE]->(b)
 CREATE (b)-[:HUSBAND]->(a)
 RETURN a, b
-```
 
 // Find the :Union node named Wedding or using any with its ID (81 in my case) and setting the new gedcom property at U11
-```
 MATCH (a:Union)
 WHERE id(a)=81 OR a.name = 'Wedding'
 SET a.gedcom = 'U11'
 RETURN a
-```
 
 // Finding the :Union node with gedcom at U11 and create a new Person node named Tim related to it as a CHILD
-```
 MATCH (a:Union)
 WHERE a.gedcom = 'U11'
 CREATE (:Person {name:"Tim"})-[:CHILD]->(a)
 RETURN a
-```
+
 
 // Find that created note with a CHILD relation, finds any UNION in the  relation and add a SON relationship from the node Tim to them.
-```
 MATCH (a:Person { name:'Tim' })-[:CHILD]->(:Union { gedcom:'U11' })
 MATCH (b:Person)-[:UNION]->(:Union { gedcom:'U11' })
 CREATE (a)-[:SON]->(b)
@@ -86,7 +79,7 @@ You can try the [movie example](https://neo4j.com/developer/movie-database/) by 
 #### Nodes
 Creating a node labeled `Person` with a property named `name` of value `Joe`. 
 
-```cypher
+```js
 CREATE (:Person {name:"Jerry"})
 ```
 Nodes are surrounded by `( )` as a circle.
@@ -95,7 +88,7 @@ Nodes are surrounded by `( )` as a circle.
 
 Creating two different nodes like before but this time linking one to the other with a relation, typed as `KNOW` and with a property named `date`.
 
-```cypher
+```js
 CREATE (:Person {name:'Rick'})-[:KNOW]->(:Morty {name: "Morty", dimension: "C-137"})
 CREATE (:Person {name:'Rick'})-[:KNOW {date:'2015-06-23'}]->(:Person {name: "Beth"})
 ```
@@ -106,7 +99,7 @@ Relation are arrows `-->`. The relationship is only one-sided
 
 Queries can use a lot of special [keywords](https://neo4j.com/docs/developer-manual/current/cypher/keyword-glossary/) and can be tweaked. Here is a simple one.
 
-```cypher
+```js
 MATCH (:Person)-[:KNOW]->(n:Morty)
 WHERE n.dimention = "C-137" 
 RETURN n
@@ -160,7 +153,7 @@ Virtualenv creates a folder which contains all the necessary executables to use 
 Checkout the example [movie py2neo](https://github.com/neo4j-examples/movies-python-py2neo-3.0) from neo4j.
 On windows to activate the cypher app rather than the (Linux) instruction from the example:
 
-    cypher-app\Scripts\deactivate
+    cypher-app\Scripts\activate
 
 ### Visualisation
 
