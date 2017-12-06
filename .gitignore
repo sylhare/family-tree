@@ -16,3 +16,7 @@
 /tmp
 /public
 /neo4j 
+
+#Ignore python related file
+*.pyc
+__pycache__/

@@ -15,7 +15,7 @@ var vis = d3.select("#chart").append("svg")
     .attr("width", w)
     .attr("height", h);
 
-//d3.json("followers", function(json)
+//d3.json("followers", function(json) not functional
 d3.json("sample_children.json", function(json) {
   root = json;
   root.fixed = true;
