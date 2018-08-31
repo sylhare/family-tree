@@ -171,3 +171,17 @@ You can use the minified 3D.js library with:
 ```html
  <script src="https://d3js.org/d3.v4.min.js"></script>
 ```
+
+## Set Up
+
+### Install Gedcom Parser
+
+Install node
+```
+brew install node
+```
+
+Then install the gedcom parser via npm
+```
+npm install --save parse-gedcom
+```
