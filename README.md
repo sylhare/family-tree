@@ -172,16 +172,8 @@ You can use the minified 3D.js library with:
  <script src="https://d3js.org/d3.v4.min.js"></script>
 ```
 
-## Set Up
+## Gedcom
 
-### Install Gedcom Parser
+[GEDCOM](https://en.wikipedia.org/wiki/GEDCOM) (an acronym standing for Genealogical Data Communication) is an open de facto specification for exchanging genealogical data between different genealogy software.
 
-Install node
-```
-brew install node
-```
-
-Then install the gedcom parser via npm
-```
-npm install --save parse-gedcom
-```
+There are some gedcom parser in the resources folder.
