@@ -5,7 +5,7 @@
 Here is a simple model straight from the neo4j website
 ![](https://github.com/Sylhare/family-tree-neo4j/blob/master/resources/img/label-property-graph-model.JPG?raw=true)
 
-We'll start with something with that then make it evolve.
+We'll start with something then make it evolve.
 
 ```js
 //Creates 2 Person type node Anna and Dany in a UNION type relationship with a Union node
