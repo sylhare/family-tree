@@ -1,0 +1,11 @@
+.row
+  .col-lg-9.col-md-12
+    .list-group
+      - movies.each do |movie|
+        = link_to movie_path(movie.title), class: 'list-group-item' do
+          = movie.title
+          -# slower method to count the people involved in each movie
+          -#= "(#{movie.people.count})"
+          %span.badge
+            = people_in_movies[movie.uuid]
+

@@ -1,0 +1,10 @@
+.row
+  .col-lg-9.col-md-12
+    .list-group
+      - people.each do |person|
+        = link_to person_path(person.name), class: 'list-group-item' do
+          = person.name
+          %span.badge
+            = movies_by_people[person.uuid].to_i
+
+

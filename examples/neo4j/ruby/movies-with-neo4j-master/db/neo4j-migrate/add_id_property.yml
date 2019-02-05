@@ -1,0 +1,6 @@
+# Provide models to which IDs should be added.
+# # It will only modify nodes that do not have IDs. There is no danger of overwriting data.
+# # models: [Student,Lesson,Teacher,Exam]
+models:
+  - Movie
+  - Person
