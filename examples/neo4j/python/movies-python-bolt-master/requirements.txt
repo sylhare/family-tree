@@ -1,0 +1,2 @@
+Flask==0.10.1
+neo4j-driver==1.4.0

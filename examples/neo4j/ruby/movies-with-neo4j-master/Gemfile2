@@ -1,0 +1,8 @@
+
+#gem "therubyracer"
+gem 'less-rails'
+gem 'twitter-bootstrap-rails', :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git'
+#gem "devise"
+gem 'factory_girl'
+gem 'factory_girl_rails'
+gem 'email_spec'
