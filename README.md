@@ -1,8 +1,8 @@
-# Family Tree neo4j
+# Family Tree
 
 ## Model
 
-Here is a simple model straight from the neo4j website
+Here is a simple graph model straight from the neo4j website
 ![](https://github.com/Sylhare/family-tree-neo4j/blob/master/resources/img/label-property-graph-model.JPG?raw=true)
 
 We'll start with something then make it evolve.
