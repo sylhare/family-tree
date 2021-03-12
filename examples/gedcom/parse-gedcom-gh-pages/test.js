@@ -23,18 +23,18 @@ function fixture_d3ize(t, name) {
     t.end();
 }
 
-test('ged', function(t) {
-    t.test(function(t) {
+test('ged', function (t) {
+    t.test(function (t) {
         fixture(t, 'smallest');
     });
-    t.test(function(t) {
+    t.test(function (t) {
         fixture(t, 'me');
     });
     t.end();
 });
 
-test('d3ize', function(t) {
-    t.test(function(t) {
+test('d3ize', function (t) {
+    t.test(function (t) {
         fixture_d3ize(t, 'me');
     });
     t.end();

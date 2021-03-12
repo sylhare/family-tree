@@ -9,19 +9,21 @@ var traverse = require('traverse');
 var lineRe = /\s*(0|[1-9]+[0-9]*) (@[^@]+@ |)([A-Za-z0-9_]+)( [^\n\r]*|)/;
 
 function parse(input) {
-    var start = { root: { tree: [] }, level: 0 };
+    var start = {root: {tree: []}, level: 0};
     start.pointer = start.root;
 
     return traverse(input
         .split('\n')
         .map(mapLine)
-        .filter(function(_) { return _; })
+        .filter(function (_) {
+            return _;
+        })
         .reduce(buildTree, start)
-        .root.tree).map(function(node) {
-            delete node.up;
-            delete node.level;
-            this.update(node);
-        });
+        .root.tree).map(function (node) {
+        delete node.up;
+        delete node.level;
+        this.update(node);
+    });
 
     // the basic trick of this module is turning the suggested tree
     // structure of a GEDCOM file into a tree in JSON. This reduction
@@ -34,10 +36,10 @@ function parse(input) {
         } else if (data.level > memo.level) {
             var up = memo.pointer;
             memo.pointer = memo.pointer.tree[
-                memo.pointer.tree.length - 1];
-                memo.pointer.tree.push(data);
-                memo.pointer.up = up;
-                memo.level = data.level;
+            memo.pointer.tree.length - 1];
+            memo.pointer.tree.push(data);
+            memo.pointer.up = up;
+            memo.level = data.level;
         } else if (data.level < memo.level) {
             // the jump up in the stack may be by more than one, so ascend
             // until we're at the right level.

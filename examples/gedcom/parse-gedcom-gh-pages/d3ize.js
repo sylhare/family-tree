@@ -1,5 +1,5 @@
 function hasTag(val) {
-    return function(node) {
+    return function (node) {
         return node.tag === val;
     };
 }
@@ -10,11 +10,11 @@ function d3ize(tree) {
         .map(toNode);
     var families = tree.filter(hasTag('FAM'));
     var familyNodes = families.map(toNode);
-    var links = families.reduce(function(memo, family) {
+    var links = families.reduce(function (memo, family) {
         return memo.concat(familyLinks(family));
     }, []);
     var allNodes = peopleNodes.concat(familyNodes);
-    var indexedNodes = allNodes.reduce(function(memo, node, i) {
+    var indexedNodes = allNodes.reduce(function (memo, node, i) {
         memo[node.id] = i;
         return memo;
     }, {});
@@ -45,10 +45,11 @@ function toNode(p) {
 }
 
 function idToIndex(indexedNodes) {
-    return function(link) {
+    return function (link) {
         function getIndexed(id) {
             return indexedNodes[id];
         }
+
         return {
             source: getIndexed(link.source),
             target: getIndexed(link.target)
@@ -57,11 +58,11 @@ function idToIndex(indexedNodes) {
 }
 
 function familyLinks(family) {
-    var memberLinks = family.tree.filter(function(member) {
+    var memberLinks = family.tree.filter(function (member) {
         // avoid connecting MARR, etc: things that are not
         // people.
         return member.data && member.data[0] === '@';
-    }).map(function(member) {
+    }).map(function (member) {
         return {
             source: family.pointer,
             target: member.data
