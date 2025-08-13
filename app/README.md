@@ -21,6 +21,7 @@
    ```
 3. **Wait for startup** (30-60 seconds) until you see:
    ```
+   genealogy-ui   | nginx/1.29.0 ... start worker processes
    genealogy-api  | Uvicorn running on http://0.0.0.0:8000
    neo4j          | Started.
    ```
@@ -32,8 +33,17 @@
 - `POST /tree` - Submit complete family tree data
 
 ### Running Tests
+
+#### Backend Tests
 ```bash
 cd app
 uv pip install -r requirements.txt
 PYTHONPATH=. pytest -q
+```
+
+#### Frontend Tests  
+```bash
+cd ui
+npm test              # Interactive test runner
+npm run test:coverage # Generate coverage report
 ```

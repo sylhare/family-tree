@@ -23,5 +23,13 @@ services:
     ports:
       - "8000:8000"
 
+  ui:
+    build: ./ui
+    container_name: genealogy-ui
+    depends_on:
+      - api
+    ports:
+      - "3000:80"
+
 volumes:
   neo4j_data: 

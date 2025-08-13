@@ -23,3 +23,6 @@ __pycache__/
 .DS_Store
 *.xml
 .idea/*
+**/node_modules/
+app/ui/coverage
+app/ui/dist
