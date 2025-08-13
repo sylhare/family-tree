@@ -1,0 +1,27 @@
+services:
+  neo4j:
+    image: neo4j:5.16
+    container_name: genealogy-neo4j
+    environment:
+      NEO4J_AUTH: neo4j/password
+      NEO4J_PLUGINS: '["apoc"]'
+    ports:
+      - "7474:7474"  # Neo4j Browser
+      - "7687:7687"  # Bolt protocol
+    volumes:
+      - neo4j_data:/data
+
+  api:
+    build: .
+    container_name: genealogy-api
+    depends_on:
+      - neo4j
+    environment:
+      NEO4J_URI: bolt://neo4j:7687
+      NEO4J_USER: neo4j
+      NEO4J_PASSWORD: password
+    ports:
+      - "8000:8000"
+
+volumes:
+  neo4j_data: 
