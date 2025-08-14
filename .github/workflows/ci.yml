@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  push:
+    branches: [ "**" ]
+  pull_request:
+
+jobs:
+  backend:
+    name: Backend (pytest via uv)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: '0.4.x'
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies (system)
+        working-directory: app
+        run: uv pip install --system -r requirements.txt
+
+      - name: Run tests
+        working-directory: app
+        env:
+          PYTHONPATH: .
+        run: uv run -m pytest -q
+
+  ui:
+    name: UI (Vitest)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: app/ui/package-lock.json
+
+      - name: Install dependencies
+        working-directory: app/ui
+        run: npm ci
+
+      - name: Run UI tests (coverage)
+        working-directory: app/ui
+        run: npm run test:coverage 
