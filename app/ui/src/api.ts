@@ -27,4 +27,13 @@ export const api = {
     
     return response.json();
   },
+
+  async getTree(): Promise<GenealogicalTree> {
+    const response = await fetch(`${API_BASE}/tree`);
+    if (!response.ok) {
+      const text = await response.text();
+      throw new Error(text || `Request failed: ${response.statusText}`);
+    }
+    return response.json();
+  },
 }; 

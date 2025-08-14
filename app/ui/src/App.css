@@ -626,4 +626,44 @@ select:focus {
   100% {
     left: 100%;
   }
+}
+
+/* ===== TREE VISUALIZATION STYLES ===== */
+.tree-visualization {
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #dee2e6;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.tree-visualization-empty {
+  margin-bottom: 1rem;
+}
+
+/* ReactFlow custom styles */
+.react-flow__controls {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+.react-flow__minimap {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+.react-flow__attribution {
+  background: rgba(255, 255, 255, 0.8) !important;
+  color: #666 !important;
+  font-size: 10px !important;
+}
+
+/* Node styling adjustments */
+.react-flow__node {
+  font-family: 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+}
+
+.react-flow__handle {
+  background: #667eea !important;
+  border: 2px solid white !important;
+  width: 8px !important;
+  height: 8px !important;
 } 

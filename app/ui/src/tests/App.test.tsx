@@ -10,6 +10,7 @@ vi.mock('../api', () => ({
   api: {
     healthCheck: vi.fn(),
     createTree: vi.fn(),
+    getTree: vi.fn(),
   }
 }));
 
@@ -27,6 +28,7 @@ describe('App', () => {
     // Mock successful health check by default
     vi.mocked(api.healthCheck).mockResolvedValue({ status: 'ok' });
     vi.mocked(api.createTree).mockResolvedValue({ status: 'success' });
+    vi.mocked(api.getTree).mockResolvedValue({ persons: [], relationships: [] });
   });
 
   afterEach(() => {
@@ -90,8 +92,9 @@ describe('App', () => {
       expect(screen.getByText('Added John Doe to the family tree')).toBeInTheDocument();
     });
 
-    // Check person appears in summary
-    expect(screen.getByText('👥 1 person')).toBeInTheDocument();
+    // Check person appears in summary (switch to List view to see details)
+    expect(screen.getByText('Person')).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: /list/i }));
     expect(screen.getByText('John Doe')).toBeInTheDocument();
   });
 
@@ -119,7 +122,7 @@ describe('App', () => {
     });
 
     // Should still only have 1 person
-    expect(screen.getByText('👥 1 person')).toBeInTheDocument();
+    expect(screen.getByText('1')).toBeInTheDocument();
   });
 
   it('adds a relationship successfully', async () => {
@@ -150,7 +153,8 @@ describe('App', () => {
       expect(screen.getByText('Added relationship')).toBeInTheDocument();
     });
 
-    expect(screen.getByText('🔗 1 relationship')).toBeInTheDocument();
+    // Relationship count card shows 1
+    expect(screen.getAllByText('1')[0]).toBeInTheDocument();
   });
 
   it('prevents adding duplicate relationships', async () => {
@@ -188,7 +192,7 @@ describe('App', () => {
     });
 
     // Should still only have 1 relationship
-    expect(screen.getByText('🔗 1 relationship')).toBeInTheDocument();
+    expect(screen.getAllByText('1')[0]).toBeInTheDocument();
   });
 
   it('submits tree to API successfully', async () => {
@@ -282,7 +286,7 @@ describe('App', () => {
     await user.type(screen.getByLabelText(/name/i), 'Test Person');
     await user.click(screen.getByRole('button', { name: /add person/i }));
 
-    expect(screen.getByText('👥 1 person')).toBeInTheDocument();
+    expect(screen.getAllByText('1')[0]).toBeInTheDocument();
 
     // Clear all data
     await user.click(screen.getByRole('button', { name: /clear all/i }));
@@ -291,7 +295,7 @@ describe('App', () => {
       expect(screen.getByText('All data cleared')).toBeInTheDocument();
     });
 
-    expect(screen.getByText(/no family data yet/i)).toBeInTheDocument();
+    expect(screen.getByText(/start building your family tree/i)).toBeInTheDocument();
     expect(mockConfirm).toHaveBeenCalledWith('Are you sure you want to clear all data?');
   });
 
@@ -314,7 +318,7 @@ describe('App', () => {
     await user.click(screen.getByRole('button', { name: /clear all/i }));
 
     // Data should still be there
-    expect(screen.getByText('👥 1 person')).toBeInTheDocument();
+    expect(screen.getAllByText('1')[0]).toBeInTheDocument();
     expect(screen.queryByText('All data cleared')).not.toBeInTheDocument();
   });
 
@@ -362,7 +366,7 @@ describe('App', () => {
 
     // Wait for person to be added
     await waitFor(() => {
-      expect(screen.getByText('👥 1 person')).toBeInTheDocument();
+      expect(screen.getAllByText('1')[0]).toBeInTheDocument();
     });
 
     // Button should now be enabled

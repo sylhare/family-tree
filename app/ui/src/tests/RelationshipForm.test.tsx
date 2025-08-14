@@ -111,7 +111,9 @@ describe('RelationshipForm', () => {
     await user.selectOptions(screen.getByLabelText(/from person/i), '1');
     await user.selectOptions(screen.getByLabelText(/to person/i), '1');
 
-    await user.click(screen.getByRole('button', { name: /add relationship/i }));
+    // Submit via form to bypass button disabled state
+    const form = screen.getByRole('button', { name: /add relationship/i }).closest('form')!;
+    fireEvent.submit(form);
 
     expect(alertMock).toHaveBeenCalledWith('A person cannot have a relationship with themselves');
     expect(mockOnAddRelationship).not.toHaveBeenCalled();
@@ -120,7 +122,7 @@ describe('RelationshipForm', () => {
     window.alert = originalAlert;
   });
 
-  it('disables submit button when less than 2 persons available', () => {
+  it('shows empty-state when less than 2 persons available', () => {
     const singlePerson = [mockPersons[0]];
     
     render(
@@ -130,8 +132,7 @@ describe('RelationshipForm', () => {
       />
     );
 
-    const submitButton = screen.getByRole('button', { name: /add relationship/i });
-    expect(submitButton).toBeDisabled();
+    expect(screen.getByText(/add at least 2 people/i)).toBeInTheDocument();
   });
 
   it('clears form after successful submission', async () => {

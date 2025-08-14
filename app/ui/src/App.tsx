@@ -21,9 +21,24 @@ function App() {
     try {
       await api.healthCheck();
       setApiStatus('online');
+      // Load initial tree after API is reachable
+      await loadInitialTree();
     } catch (error) {
       setApiStatus('offline');
       console.error('API health check failed:', error);
+    }
+  };
+
+  const loadInitialTree = async () => {
+    try {
+      const tree = await api.getTree();
+      // Only update if backend has some data
+      if ((tree.persons && tree.persons.length) || (tree.relationships && tree.relationships.length)) {
+        setPersons(tree.persons);
+        setRelationships(tree.relationships);
+      }
+    } catch (error) {
+      console.error('Failed to load initial tree:', error);
     }
   };
 
