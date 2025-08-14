@@ -55,4 +55,48 @@ async def create_tree(tree: GenealogicalTree):
         raise HTTPException(status_code=500, detail=str(exc))
 
     finally:
+        close_driver(driver)
+
+
+@router.get("/tree", tags=["Genealogy"], summary="Retrieve the current genealogical tree")
+async def get_tree():
+    """Fetch all persons and relationships from Neo4j and return as a GenealogicalTree."""
+    driver = get_driver()
+    try:
+        with driver.session() as session:
+            # Fetch persons
+            persons_result = session.run(
+                """
+                MATCH (p:Person)
+                RETURN p.id AS id, p.name AS name, p.birth AS birth
+                ORDER BY name
+                """
+            )
+            persons = [
+                {"id": record["id"], "name": record["name"], "birth": record["birth"]}
+                for record in persons_result
+            ]
+
+            # Fetch relationships of interest between persons
+            relationships_result = session.run(
+                """
+                MATCH (a:Person)-[r]->(b:Person)
+                RETURN a.id AS start_id, b.id AS end_id, type(r) AS type
+                """
+            )
+            relationships = [
+                {
+                    "start_id": record["start_id"],
+                    "end_id": record["end_id"],
+                    "type": record["type"],
+                }
+                for record in relationships_result
+            ]
+
+        return {"persons": persons, "relationships": relationships}
+
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=str(exc))
+
+    finally:
         close_driver(driver) 
