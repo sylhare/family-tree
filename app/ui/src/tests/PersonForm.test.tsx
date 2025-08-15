@@ -21,7 +21,7 @@ describe('PersonForm', () => {
     expect(screen.getByRole('button', { name: /add person/i })).toBeInTheDocument();
   });
 
-  it('submits form with valid data', async () => {
+  it('submits form with explicit id', async () => {
     const user = userEvent.setup();
     render(<PersonForm onAddPerson={mockOnAddPerson} />);
 
@@ -38,6 +38,27 @@ describe('PersonForm', () => {
         birth: '1990-05-15',
       });
     });
+  });
+
+  it('auto-generates id when not provided', async () => {
+    const user = userEvent.setup();
+    const originalRandom = Math.random;
+    Math.random = () => 0.123456789; // suffix '3d0rj' (approx) but we will only assert prefix and format
+
+    render(<PersonForm onAddPerson={mockOnAddPerson} />);
+
+    await user.type(screen.getByLabelText(/name/i), 'Alice Smith');
+
+    await user.click(screen.getByRole('button', { name: /add person/i }));
+
+    await waitFor(() => {
+      const arg = mockOnAddPerson.mock.calls[0][0] as Person;
+      expect(arg.name).toBe('Alice Smith');
+      expect(arg.id).toMatch(/^alice-smith-/);
+      expect(arg.birth).toBeUndefined();
+    });
+
+    Math.random = originalRandom;
   });
 
   it('submits form without birth date', async () => {
@@ -70,7 +91,7 @@ describe('PersonForm', () => {
     const form = screen.getByRole('button', { name: /add person/i }).closest('form')!;
     fireEvent.submit(form);
 
-    expect(alertMock).toHaveBeenCalledWith('ID and Name are required');
+    expect(alertMock).toHaveBeenCalledWith('Name is required');
     expect(mockOnAddPerson).not.toHaveBeenCalled();
 
     // Restore original alert

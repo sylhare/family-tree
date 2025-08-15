@@ -10,15 +10,27 @@ export const PersonForm: React.FC<PersonFormProps> = ({ onAddPerson }) => {
   const [name, setName] = useState('');
   const [birth, setBirth] = useState('');
 
+  const generateIdFromName = (inputName: string) => {
+    const base = inputName
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, '-')
+      .replace(/[^a-z0-9-]/g, '');
+    const suffix = Math.random().toString(36).slice(2, 7);
+    return `${base || 'person'}-${suffix}`;
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!id.trim() || !name.trim()) {
-      alert('ID and Name are required');
+    if (!name.trim()) {
+      alert('Name is required');
       return;
     }
 
+    const computedId = id.trim() || generateIdFromName(name);
+
     const person: Person = {
-      id: id.trim(),
+      id: computedId,
       name: name.trim(),
       birth: birth.trim() || undefined,
     };
@@ -34,14 +46,13 @@ export const PersonForm: React.FC<PersonFormProps> = ({ onAddPerson }) => {
       <h2>Add Person</h2>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label htmlFor="id">ID *</label>
+          <label htmlFor="id">ID (optional)</label>
           <input
             type="text"
             id="id"
             value={id}
             onChange={(e) => setId(e.target.value)}
-            placeholder="Unique identifier (e.g., john-1)"
-            required
+            placeholder="Leave blank to auto-generate"
           />
         </div>
         
