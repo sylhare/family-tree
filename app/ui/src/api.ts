@@ -36,4 +36,17 @@ export const api = {
     }
     return response.json();
   },
+
+  async importGedcomX(json: unknown): Promise<ApiResponse> {
+    const response = await fetch(`${API_BASE}/import/gedcomx`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(json),
+    });
+    if (!response.ok) {
+      const text = await response.text();
+      throw new Error(text || `Request failed: ${response.statusText}`);
+    }
+    return response.json();
+  },
 }; 

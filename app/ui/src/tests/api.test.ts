@@ -86,4 +86,85 @@ describe('API Service', () => {
       await expect(api.createTree(mockTree)).rejects.toThrow('Request failed: Internal Server Error');
     });
   });
+
+  describe('importGedcomX', () => {
+    const mockGedcomXData = {
+      persons: [
+        {
+          id: 'I1',
+          names: [{ nameForms: [{ fullText: 'John Doe' }] }],
+          facts: [{ type: 'http://gedcomx.org/Birth', date: { original: '1970-01-01' } }]
+        }
+      ],
+      relationships: [
+        {
+          type: 'http://gedcomx.org/Couple',
+          person1: { resource: '#I1' },
+          person2: { resource: '#I2' }
+        }
+      ]
+    };
+
+    it('imports GEDCOM X data successfully', async () => {
+      const mockResponse = { status: 'success' };
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: () => Promise.resolve(mockResponse),
+      });
+
+      const result = await api.importGedcomX(mockGedcomXData);
+      
+      expect(mockFetch).toHaveBeenCalledWith('/import/gedcomx', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(mockGedcomXData),
+      });
+      expect(result).toEqual(mockResponse);
+    });
+
+    it('throws error when import API returns error response', async () => {
+      const errorText = 'Invalid GEDCOM X format';
+      mockFetch.mockResolvedValueOnce({
+        ok: false,
+        statusText: 'Bad Request',
+        text: () => Promise.resolve(errorText),
+      });
+
+      await expect(api.importGedcomX(mockGedcomXData)).rejects.toThrow(errorText);
+    });
+
+    it('throws error with status text when no error text provided', async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: false,
+        statusText: 'Internal Server Error',
+        text: () => Promise.resolve(''),
+      });
+
+      await expect(api.importGedcomX(mockGedcomXData)).rejects.toThrow('Request failed: Internal Server Error');
+    });
+
+    it('handles network errors', async () => {
+      mockFetch.mockRejectedValueOnce(new Error('Network error'));
+
+      await expect(api.importGedcomX(mockGedcomXData)).rejects.toThrow('Network error');
+    });
+
+    it('handles empty GEDCOM X data', async () => {
+      const emptyData = { persons: [], relationships: [] };
+      const mockResponse = { status: 'success' };
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: () => Promise.resolve(mockResponse),
+      });
+
+      const result = await api.importGedcomX(emptyData);
+      
+      expect(mockFetch).toHaveBeenCalledWith('/import/gedcomx', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(emptyData),
+      });
+      expect(result).toEqual(mockResponse);
+    });
+  });
 }); 

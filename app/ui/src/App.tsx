@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { PersonForm } from './components/PersonForm';
 import { RelationshipForm } from './components/RelationshipForm';
 import { TreeSummary } from './components/TreeSummary';
+import { GedcomXImport } from './components/GedcomXImport';
 import { api } from './api';
 import { Person, Relationship, GenealogicalTree } from './types';
 import './App.css';
@@ -127,6 +128,7 @@ function App() {
         <div className="forms-section">
           <PersonForm onAddPerson={handleAddPerson} />
           <RelationshipForm persons={persons} onAddRelationship={handleAddRelationship} />
+          <GedcomXImport onImported={loadInitialTree} />
         </div>
 
         <div className="summary-section">
