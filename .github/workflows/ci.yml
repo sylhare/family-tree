@@ -13,25 +13,27 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up uv
-        uses: astral-sh/setup-uv@v3
-        with:
-          version: '0.4.x'
-
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Install dependencies (system)
-        working-directory: app
-        run: uv pip install --system -r requirements.txt
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: '0.4.x'
+          enable-cache: true
+          cache-dependency-glob: |
+            app/pyproject.toml
+            app/uv.lock
 
-      - name: Run tests
+      - name: Sync dependencies (uv)
         working-directory: app
-        env:
-          PYTHONPATH: .
-        run: uv run -m pytest -q
+        run: uv sync
+
+      - name: Run tests (uv)
+        working-directory: app
+        run: uv run -m pytest
 
   ui:
     name: UI (Vitest)

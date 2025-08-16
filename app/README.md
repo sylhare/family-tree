@@ -35,10 +35,21 @@
 ### Running Tests
 
 #### Backend Tests
+
+Using uv (recommended)
 ```bash
 cd app
-uv pip install -r requirements.txt
-PYTHONPATH=. pytest -q
+uv sync
+uv run -m pytest
+```
+
+Or using a classic virtualenv
+```bash
+cd app
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+pytest
 ```
 
 #### Frontend Tests  
