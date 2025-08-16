@@ -1,0 +1,25 @@
+[project]
+name = "family-tree-api"
+version = "0.1.0"
+description = "FastAPI backend for family tree"
+readme = "README.md"
+requires-python = ">=3.11"
+
+# Backend runtime and test dependencies
+dependencies = [
+  "fastapi",
+  "uvicorn[standard]",
+  "neo4j",
+  "httpx",
+  "pytest",
+]
+
+[tool.pytest.ini_options]
+# Discover tests and set import path to include src/ so `from src...` works without PYTHONPATH
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-q"
+
+[tool.uv]
+# uv will create and manage a virtual environment with `uv sync`
+# No special settings required here, but section kept for future tweaks 
