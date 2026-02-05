@@ -186,3 +186,77 @@ MATCH (n:Person)
 WHERE n.birth CONTAINS "1970"
 RETURN n.name, n.birth
 ```
+
+## Error Handling Examples
+
+### Invalid Relationship Type
+
+```bash
+curl -X POST http://localhost:8000/tree \
+     -H "Content-Type: application/json" \
+     -d '{
+           "persons": [
+             {"id": "test", "name": "Test Person"}
+           ],
+           "relationships": [
+             {"start_id": "1", "end_id": "test", "type": "RELATED TO"}
+           ]
+         }'
+```
+
+**Expected response:**
+```json
+{"detail": "Invalid relationship type: RELATED TO"}
+```
+
+### Valid Relationship Types
+
+The API accepts relationship types that are valid Python identifiers (no spaces, special characters). Examples:
+- ✅ `PARENT_OF`
+- ✅ `MARRIED`
+- ✅ `SIBLING`
+- ✅ `GRANDPARENT_OF`
+- ❌ `MARRIED TO` (contains space)
+- ❌ `PARENT-OF` (contains hyphen)
+
+## Common Neo4j Commands
+
+### Clear All Data (Use with Caution!)
+
+```cypher
+MATCH (n) DETACH DELETE n
+```
+
+### View Database Schema
+
+```cypher
+CALL db.schema.visualization()
+```
+
+### Count All Relationships
+
+```cypher
+MATCH ()-[r]->() 
+RETURN type(r) AS RelationshipType, count(r) AS Count
+```
+
+## Cleanup
+
+To stop the application and remove containers:
+
+```bash
+docker compose down
+```
+
+To also remove the Neo4j data volume:
+
+```bash
+docker compose down -v
+```
+
+## Next Steps
+
+- Explore the Neo4j Browser visualization at http://localhost:7474
+- Try creating more complex family trees with multiple generations
+- Experiment with advanced Cypher queries for genealogical analysis
+- Consider adding more relationship types like `SIBLING`, `GRANDPARENT_OF`, etc. 
