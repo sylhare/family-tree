@@ -24,15 +24,13 @@ jobs:
           version: '0.4.x'
           enable-cache: true
           cache-dependency-glob: |
-            app/pyproject.toml
-            app/uv.lock
+            pyproject.toml
+            uv.lock
 
       - name: Sync dependencies (uv)
-        working-directory: app
         run: uv sync
 
       - name: Run tests (uv)
-        working-directory: app
         run: uv run -m pytest
 
   ui:
@@ -47,12 +45,12 @@ jobs:
         with:
           node-version: '18'
           cache: 'npm'
-          cache-dependency-path: app/ui/package-lock.json
+          cache-dependency-path: ui/package-lock.json
 
       - name: Install dependencies
-        working-directory: app/ui
+        working-directory: ui
         run: npm ci
 
       - name: Run UI tests (coverage)
-        working-directory: app/ui
-        run: npm run test:coverage 
+        working-directory: ui
+        run: npm run test:coverage
