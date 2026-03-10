@@ -147,3 +147,13 @@ Our app’s minimal graph model aligns well with all three by mapping:
 - [GEDCOM 7.x Specification (FamilySearch)](https://gedcom.io/specifications/FamilySearchGEDCOMv7.html)
 - [GEDCOM X Data Formats (FamilySearch)](https://github.com/FamilySearch/gedcomx)
 - [FHISO Specifications](https://fhiso.org/standards/)
+
+---
+
+## GEDCOM — Historical Context
+
+[GEDCOM](https://en.wikipedia.org/wiki/GEDCOM) (an acronym standing for Genealogical Data Communication) is an open de facto specification for exchanging genealogical data between different genealogy software.
+
+The format was developed by The Church of Jesus Christ of Latter-day Saints (LDS Church) and has been the dominant standard for genealogical data exchange since the 1980s. GEDCOM files use the `.ged` extension and are plain-text hierarchical records.
+
+See the prototype in `resources/prototypes/gedcom/` for a minimal working example of parsing GEDCOM data.
