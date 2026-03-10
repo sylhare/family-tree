@@ -47,4 +47,3 @@ cd ui && npm run e2e
 - [Neo4j & Cypher](docs/neo4j-cypher.md)
 - [GEDCOM Standards](docs/genealogy-standards.md)
 - [API Examples](docs/examples.md)
-- [E2E Testing](docs/e2e-testing.md)

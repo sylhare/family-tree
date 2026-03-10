@@ -118,6 +118,31 @@ test.describe('Clear All', () => {
   })
 })
 
+test.describe('Import GEDCOM X', () => {
+  test('imports a GEDCOM X JSON file', async ({ page }) => {
+    const id = `gedcom-${uid()}`
+    const name = `GedcomX Person ${id}`
+
+    await page.goto('/')
+    await expect(page.getByText('✅ Online')).toBeVisible()
+
+    const dialogPromise = page.waitForEvent('dialog')
+
+    await page.locator('input[type="file"][accept*="json"]').setInputFiles({
+      name: 'family.json',
+      mimeType: 'application/json',
+      buffer: Buffer.from(JSON.stringify({
+        persons: [{ id, display: { name } }],
+        relationships: [],
+      })),
+    })
+
+    const dialog = await dialogPromise
+    expect(dialog.message()).toBe('GEDCOM X imported successfully.')
+    await dialog.accept()
+  })
+})
+
 test.describe('Save to Neo4j', () => {
   test('saves a person and it persists after page reload', async ({ page }) => {
     const id = `e2e-save-${uid()}`

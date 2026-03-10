@@ -7,7 +7,6 @@ This document provides practical examples of how to use the Genealogical Tree AP
 Make sure the application is running with Docker Compose:
 
 ```bash
-cd app
 docker compose up --build -d
 ```
 
