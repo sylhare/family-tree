@@ -76,11 +76,11 @@ export const TreeSummary: React.FC<TreeSummaryProps> = ({
 
       <div className="tree-stats">
         <div className="stat-card">
-          <span className="stat-number">{persons.length}</span>
+          <span className="stat-number" data-testid="persons-count">{persons.length}</span>
           <span className="stat-label">Person{persons.length !== 1 ? 's' : ''}</span>
         </div>
         <div className="stat-card">
-          <span className="stat-number">{relationships.length}</span>
+          <span className="stat-number" data-testid="relationships-count">{relationships.length}</span>
           <span className="stat-label">Relationship{relationships.length !== 1 ? 's' : ''}</span>
         </div>
       </div>
@@ -96,8 +96,8 @@ export const TreeSummary: React.FC<TreeSummaryProps> = ({
                   <h3>Family Members</h3>
                   <ul>
                     {persons.map((person) => (
-                      <li key={person.id} className="person-item">
-                        <div className="person-name">{person.name}</div>
+                      <li key={person.id} className="person-item" data-testid="person-item">
+                        <div className="person-name" data-testid="person-name">{person.name}</div>
                         <div className="person-details">
                           ID: {person.id}
                           {person.birth && ` • Born: ${person.birth}`}
@@ -113,7 +113,7 @@ export const TreeSummary: React.FC<TreeSummaryProps> = ({
                   <h3>Relationships</h3>
                   <ul>
                     {relationships.map((rel, index) => (
-                      <li key={index} className="relationship-item">
+                      <li key={index} className="relationship-item" data-testid="relationship-item">
                         <div className="relationship-text">
                           <strong>{getPersonName(rel.start_id)}</strong> {RELATIONSHIP_LABELS[rel.type as keyof typeof RELATIONSHIP_LABELS] || rel.type.toLowerCase().replace('_', ' ')} <strong>{getPersonName(rel.end_id)}</strong>
                         </div>

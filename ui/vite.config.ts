@@ -17,6 +17,7 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: './src/setupTests.ts',
+    exclude: ['node_modules', 'e2e'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
@@ -24,6 +25,8 @@ export default defineConfig({
         'node_modules/',
         'src/setupTests.ts',
         'vite.config.ts',
+        'playwright.config.ts',
+        'e2e/**',
         'src/index.tsx',
         'src/vite-env.d.ts'
       ]
