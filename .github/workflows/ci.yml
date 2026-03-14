@@ -3,7 +3,6 @@ name: CI
 on:
   push:
     branches: [ "**" ]
-  pull_request:
 
 jobs:
   backend:
@@ -19,20 +18,17 @@ jobs:
           python-version: '3.11'
 
       - name: Set up uv
-        uses: astral-sh/setup-uv@v3
+        uses: astral-sh/setup-uv@v5
         with:
-          version: '0.4.x'
           enable-cache: true
           cache-dependency-glob: |
-            app/pyproject.toml
-            app/uv.lock
+            pyproject.toml
+            uv.lock
 
       - name: Sync dependencies (uv)
-        working-directory: app
         run: uv sync
 
       - name: Run tests (uv)
-        working-directory: app
         run: uv run -m pytest
 
   ui:
@@ -45,14 +41,57 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '22'
           cache: 'npm'
-          cache-dependency-path: app/ui/package-lock.json
+          cache-dependency-path: ui/package-lock.json
 
       - name: Install dependencies
-        working-directory: app/ui
+        working-directory: ui
         run: npm ci
 
       - name: Run UI tests (coverage)
-        working-directory: app/ui
-        run: npm run test:coverage 
+        working-directory: ui
+        run: npm run test:coverage
+
+  e2e:
+    name: E2E (Playwright)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: ui/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ui
+        run: npm ci
+
+      - name: Install Playwright browsers
+        working-directory: ui
+        run: npx playwright install --with-deps chromium
+
+      - name: Start stack
+        run: docker compose up -d
+
+      - name: Wait for services
+        run: |
+          echo "Waiting for API..."
+          timeout 60 bash -c 'until curl -sf http://localhost:8000/health; do sleep 2; done'
+          echo "Waiting for UI..."
+          timeout 60 bash -c 'until curl -sf http://localhost:3000; do sleep 2; done'
+
+      - name: Run E2E tests
+        working-directory: ui
+        run: npm run e2e
+
+      - name: Upload screenshots
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: screenshots
+          path: docs/screenshots/

@@ -24,5 +24,6 @@ __pycache__/
 *.xml
 .idea/*
 **/node_modules/
-app/ui/coverage
-app/ui/dist
+ui/coverage
+ui/dist
+*/test-results

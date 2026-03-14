@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Family Tree — D3.js Force Layout</title>
+  <style>
+    body { margin: 0; background: #1a1a2e; font-family: sans-serif; }
+    svg { display: block; }
+    .link { stroke: #666; stroke-opacity: 0.7; }
+    .link-label { fill: #aaa; font-size: 11px; }
+    .node circle { stroke: #fff; stroke-width: 1.5px; cursor: pointer; }
+    .node text { fill: #eee; font-size: 13px; pointer-events: none; }
+    #legend { position: absolute; top: 16px; left: 16px; color: #ccc; font-size: 13px; }
+    #legend span { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
+  </style>
+</head>
+<body>
+<div id="legend">
+  <span style="background:#4e8af0"></span>Person &nbsp;
+  <span style="background:#e8735a"></span>Union
+</div>
+<svg id="graph"></svg>
+
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script>
+// ── Sample data ────────────────────────────────────────────────────────────────
+// Swap these arrays to visualise your own family tree.
+const nodes = [
+  { id: "alice",   label: "Alice",          type: "person" },
+  { id: "bob",     label: "Bob",            type: "person" },
+  { id: "u1",      label: "Marriage",       type: "union"  },
+  { id: "charlie", label: "Charlie",        type: "person" },
+  { id: "diana",   label: "Diana",          type: "person" },
+  { id: "eve",     label: "Eve",            type: "person" },
+]
+
+const links = [
+  { source: "alice",   target: "u1",      label: "UNION" },
+  { source: "bob",     target: "u1",      label: "UNION" },
+  { source: "charlie", target: "u1",      label: "CHILD" },
+  { source: "diana",   target: "u1",      label: "CHILD" },
+  { source: "alice",   target: "eve",     label: "PARENT_OF" },
+]
+// ────────────────────────────────────────────────────────────────────────────────
+
+const color = (type) => type === "union" ? "#e8735a" : "#4e8af0"
+const radius = (type) => type === "union" ? 10 : 18
+
+const w = window.innerWidth
+const h = window.innerHeight
+const svg = d3.select("#graph").attr("width", w).attr("height", h)
+
+// Arrow marker
+svg.append("defs").append("marker")
+  .attr("id", "arrow")
+  .attr("viewBox", "0 -5 10 10")
+  .attr("refX", 22).attr("refY", 0)
+  .attr("markerWidth", 6).attr("markerHeight", 6)
+  .attr("orient", "auto")
+  .append("path").attr("d", "M0,-5L10,0L0,5").attr("fill", "#666")
+
+const g = svg.append("g")
+
+// Zoom
+svg.call(d3.zoom().on("zoom", (e) => g.attr("transform", e.transform)))
+
+const simulation = d3.forceSimulation(nodes)
+  .force("link", d3.forceLink(links).id((d) => d.id).distance(100))
+  .force("charge", d3.forceManyBody().strength(-300))
+  .force("center", d3.forceCenter(w / 2, h / 2))
+
+const link = g.append("g").selectAll("line")
+  .data(links).join("line")
+  .attr("class", "link")
+  .attr("marker-end", "url(#arrow)")
+
+const linkLabel = g.append("g").selectAll("text")
+  .data(links).join("text")
+  .attr("class", "link-label")
+  .text((d) => d.label)
+
+const node = g.append("g").selectAll("g")
+  .data(nodes).join("g")
+  .attr("class", "node")
+  .call(d3.drag()
+    .on("start", (e, d) => { if (!e.active) simulation.alphaTarget(0.3).restart(); d.fx = d.x; d.fy = d.y })
+    .on("drag",  (e, d) => { d.fx = e.x; d.fy = e.y })
+    .on("end",   (e, d) => { if (!e.active) simulation.alphaTarget(0); d.fx = null; d.fy = null })
+  )
+
+node.append("circle")
+  .attr("r", (d) => radius(d.type))
+  .attr("fill", (d) => color(d.type))
+
+node.append("text")
+  .attr("dx", (d) => radius(d.type) + 4)
+  .attr("dy", "0.35em")
+  .text((d) => d.label)
+
+simulation.on("tick", () => {
+  link
+    .attr("x1", (d) => d.source.x).attr("y1", (d) => d.source.y)
+    .attr("x2", (d) => d.target.x).attr("y2", (d) => d.target.y)
+
+  linkLabel
+    .attr("x", (d) => (d.source.x + d.target.x) / 2)
+    .attr("y", (d) => (d.source.y + d.target.y) / 2)
+
+  node.attr("transform", (d) => `translate(${d.x},${d.y})`)
+})
+</script>
+</body>
+</html>
